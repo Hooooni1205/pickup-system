@@ -16,18 +16,22 @@
         }
 
         #currentNumber {
-            font-size: 30rem;
-            font-weight: bold;
+            font-size: 35rem; /* 기본 폰트 크기 */
+            font-weight: 900;
             color: #00ff00;
             text-shadow: 0px 0px 30px #00ff00;
             margin-right: 130px;
-            margin-left: 50px;
-            width: 450px; /* 고정 너비 설정 */
+            margin-left: 0px;
+            width: 500px;
             text-align: center;
-            font-family: "Roboto Mono", monospace; /* 고정폭 글꼴 */
+            font-family: "Roboto Mono", monospace;
         }
 
         #previousNumbers {
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: flex-start;
             font-size: 4rem;
             color: white;
             text-align: left;
@@ -39,13 +43,14 @@
             color: white;
             list-style-type: none;
             font-size: 6rem;
-            width: 300px; /* 고정 너비 설정 */
+            width: 300px;
             text-align: center;
-            font-family: "Roboto Mono", monospace; /* 고정폭 글꼴 */
+            font-family: "Roboto Mono", monospace;
         }
 
         ul {
             padding: 0;
+            margin-top: 10px;
         }
 
         h3 {
@@ -57,7 +62,7 @@
     </style>
 </head>
 <body onload="updateDisplay()">
-    <div id="currentNumber">000</div>
+    <div id="currentNumber"></div>
     <div id="previousNumbers">
         <h3>이전 번호</h3>
         <ul id="prevNumberList"></ul>
