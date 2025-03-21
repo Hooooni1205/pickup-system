@@ -33,7 +33,7 @@ function nextNumber() {
     get(child(dbRef, 'pickupSystem/currentNumber')).then((snapshot) => {
         if (snapshot.exists()) {
             let next = snapshot.val() + 1;
-            if (next > 100) next = 1; // 100번 다음은 1번으로
+            if (next > 100) next = 1;
             updateNumber(next);
             document.getElementById('orderNumber').value = next;
         }
@@ -47,7 +47,7 @@ function prevNumber() {
     get(child(dbRef, 'pickupSystem/currentNumber')).then((snapshot) => {
         if (snapshot.exists()) {
             let prev = snapshot.val() - 1;
-            if (prev < 1) prev = 100; // 1번 이전은 100번으로
+            if (prev < 1) prev = 100;
             updateNumber(prev);
             document.getElementById('orderNumber').value = prev;
         }
@@ -65,14 +65,12 @@ function updateNumber(number) {
             previousNumbers = data.previousNumbers || [];
             const currentNumber = data.currentNumber || null;
 
-            // 현재 번호를 이전 번호로 추가 (중복 방지)
             if (currentNumber !== null && currentNumber !== number) {
-                previousNumbers.unshift(currentNumber); // 가장 최근 번호를 앞에 추가
-                if (previousNumbers.length > 3) previousNumbers = previousNumbers.slice(0, 3); // 최대 3개 유지
+                previousNumbers.unshift(currentNumber);
+                if (previousNumbers.length > 3) previousNumbers = previousNumbers.slice(0, 3);
             }
         }
 
-        // 데이터베이스 업데이트
         set(ref(database, 'pickupSystem/'), {
             currentNumber: number,
             previousNumbers: previousNumbers
@@ -80,18 +78,10 @@ function updateNumber(number) {
     });
 }
 
-// 초기화 버튼 기능
-function resetNumbers() {
-    set(ref(database, 'pickupSystem/'), {
-        currentNumber: null,
-        previousNumbers: []
-    });
-}
-window.resetNumbers = resetNumbers;
-
 // 실시간 업데이트
 function updateDisplay() {
     const numberRef = ref(database, 'pickupSystem/');
+    const sound = document.getElementById("dingdongSound");
     onValue(numberRef, (snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
@@ -101,6 +91,12 @@ function updateDisplay() {
             const currentNumberElem = document.getElementById('currentNumber');
             currentNumberElem.innerText = currentNumber;
 
+            // 번호가 업데이트될 때 소리 재생
+            if (currentNumber) {
+                sound.currentTime = 0;
+                sound.play();
+            }
+
             // 100번인 경우 폰트 크기 줄이기
             if (currentNumber === 100) {
                 currentNumberElem.style.fontSize = '25rem';
@@ -108,12 +104,9 @@ function updateDisplay() {
                 currentNumberElem.style.fontSize = '35rem';
             }
 
-            // 이전 번호 리스트에서 현재 번호를 필터링하여 표시
-            const filteredNumbers = previousNumbers.filter(num => num !== currentNumber);
-            const prevNumberList = filteredNumbers.slice(0, 3).map(num => `<li class="previous-number">${num}</li>`).join('');
+            const prevNumberList = previousNumbers.slice(0, 3).map(num => `<li class="previous-number">${num}</li>`).join('');
             document.getElementById('prevNumberList').innerHTML = prevNumberList;
 
-            // 초기화 시 현재 번호 숨기기
             if (currentNumber === '') {
                 currentNumberElem.innerText = '';
             }
