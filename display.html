@@ -5,37 +5,47 @@
     <script type="module" src="./script.js"></script>
     <style>
         body {
-            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
             margin: 0;
             background-color: #000;
             color: white;
             font-family: 'Arial', sans-serif;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
-        #numberDisplay {
-            font-size: 10rem;
+
+        #currentNumber {
+            font-size: 15rem;
             font-weight: bold;
-            margin-bottom: 20px;
             color: #00ff00;
             text-shadow: 0px 0px 20px #00ff00;
+            margin-right: 100px;
         }
+
         #previousNumbers {
-            font-size: 2rem;
+            font-size: 2.5rem;
             color: #888;
-            margin-top: 10px;
+            text-align: left;
+            margin-left: 50px;
         }
+
         .previous-number {
-            margin: 5px;
+            margin: 5px 0;
             color: #555;
+            list-style-type: none;
+        }
+
+        ul {
+            padding: 0;
         }
     </style>
 </head>
 <body onload="updateDisplay()">
-    <div id="numberDisplay">0</div>
-    <div id="previousNumbers">이전 번호: <span id="prevNumberList">없음</span></div>
+    <div id="currentNumber">0</div>
+    <div id="previousNumbers">
+        <h3>이전 번호</h3>
+        <ul id="prevNumberList"></ul>
+    </div>
 </body>
 </html>
