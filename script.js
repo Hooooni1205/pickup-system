@@ -99,9 +99,9 @@ function updateDisplay() {
 
             // 100번인 경우 폰트 크기 줄이기
             if (currentNumber === 100) {
-                currentNumberElem.style.fontSize = '20rem';
+                currentNumberElem.style.fontSize = '25rem';
             } else {
-                currentNumberElem.style.fontSize = '30rem';
+                currentNumberElem.style.fontSize = '35rem';
             }
 
             const prevNumberList = previousNumbers.slice(-3).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
