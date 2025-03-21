@@ -22,9 +22,22 @@ const database = getDatabase(app);
 function callNumber() {
     const number = parseInt(document.getElementById('orderNumber').value);
     if (!isNaN(number)) {
-        set(ref(database, 'pickupSystem/'), {
-            currentNumber: number,
-            previousNumbers: [number]
+        const dbRef = ref(database);
+        get(child(dbRef, 'pickupSystem')).then((snapshot) => {
+            let previousNumbers = [];
+            if (snapshot.exists()) {
+                const data = snapshot.val();
+                previousNumbers = data.previousNumbers || [];
+                // 중복 방지
+                if (!previousNumbers.includes(number)) {
+                    previousNumbers.push(number);
+                    if (previousNumbers.length > 5) previousNumbers.shift(); // 최근 5개만 저장
+                }
+            }
+            set(ref(database, 'pickupSystem/'), {
+                currentNumber: number,
+                previousNumbers: previousNumbers
+            });
         });
     }
 }
@@ -36,9 +49,7 @@ function nextNumber() {
     get(child(dbRef, 'pickupSystem/currentNumber')).then((snapshot) => {
         if (snapshot.exists()) {
             const next = snapshot.val() + 1;
-            update(ref(database, 'pickupSystem/'), {
-                currentNumber: next
-            });
+            updateNumber(next);
             document.getElementById('orderNumber').value = next;
         }
     });
@@ -51,14 +62,33 @@ function prevNumber() {
     get(child(dbRef, 'pickupSystem/currentNumber')).then((snapshot) => {
         if (snapshot.exists()) {
             const prev = Math.max(1, snapshot.val() - 1);
-            update(ref(database, 'pickupSystem/'), {
-                currentNumber: prev
-            });
+            updateNumber(prev);
             document.getElementById('orderNumber').value = prev;
         }
     });
 }
 window.prevNumber = prevNumber;
+
+// 번호 업데이트 (공통 함수)
+function updateNumber(number) {
+    const dbRef = ref(database);
+    get(child(dbRef, 'pickupSystem')).then((snapshot) => {
+        let previousNumbers = [];
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            previousNumbers = data.previousNumbers || [];
+            // 중복 방지
+            if (!previousNumbers.includes(number)) {
+                previousNumbers.push(number);
+                if (previousNumbers.length > 5) previousNumbers.shift(); // 최근 5개만 저장
+            }
+        }
+        set(ref(database, 'pickupSystem/'), {
+            currentNumber: number,
+            previousNumbers: previousNumbers
+        });
+    });
+}
 
 // 실시간 업데이트
 function updateDisplay() {
@@ -70,19 +100,11 @@ function updateDisplay() {
             const previousNumbers = data.previousNumbers || [];
 
             // 현재 번호 표시
-            document.getElementById('numberDisplay').innerText = currentNumber;
+            document.getElementById('currentNumber').innerText = currentNumber;
 
             // 이전 번호 표시
-            const prevNumberList = previousNumbers.slice(-5).reverse().map(num => `<span class="previous-number">${num}</span>`).join(', ');
+            const prevNumberList = previousNumbers.slice(-5).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
             document.getElementById('prevNumberList').innerHTML = prevNumberList;
-
-            // 이전 번호 저장 (중복 방지)
-            if (!previousNumbers.includes(currentNumber)) {
-                previousNumbers.push(currentNumber);
-                update(ref(database, 'pickupSystem/'), {
-                    previousNumbers: previousNumbers
-                });
-            }
         }
     });
 }
