@@ -48,6 +48,12 @@
         button:active {
             transform: scale(0.98);
         }
+        #resetBtn {
+            background-color: #ff4d4d;
+        }
+        #resetBtn:hover {
+            background-color: #cc0000;
+        }
     </style>
 </head>
 <body>
@@ -56,5 +62,6 @@
     <button onclick="callNumber()">호출</button>
     <button onclick="prevNumber()">이전 번호</button>
     <button onclick="nextNumber()">다음 번호</button>
+    <button id="resetBtn" onclick="resetNumbers()">초기화</button>
 </body>
 </html>
