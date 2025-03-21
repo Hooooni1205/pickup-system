@@ -22,8 +22,9 @@
             text-shadow: 0px 0px 30px #00ff00;
             margin-right: 50px;
             margin-left: 50px;
-            min-width: 300px; /* 고정 너비로 위치 고정 */
+            min-width: 450px; /* 고정 너비 설정 */
             text-align: center;
+            font-family: 'Courier New', monospace; /* 고정폭 글꼴 */
         }
 
         #previousNumbers {
@@ -38,8 +39,9 @@
             color: white;
             list-style-type: none;
             font-size: 6rem;
-            min-width: 200px; /* 고정 너비로 위치 고정 */
+            min-width: 250px; /* 고정 너비 설정 */
             text-align: center;
+            font-family: 'Courier New', monospace; /* 고정폭 글꼴 */
         }
 
         ul {
@@ -55,7 +57,7 @@
     </style>
 </head>
 <body onload="updateDisplay()">
-    <div id="currentNumber">0</div>
+    <div id="currentNumber">000</div>
     <div id="previousNumbers">
         <h3>이전 번호</h3>
         <ul id="prevNumberList"></ul>
