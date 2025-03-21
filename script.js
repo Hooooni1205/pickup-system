@@ -63,8 +63,11 @@ function updateNumber(number) {
         if (snapshot.exists()) {
             const data = snapshot.val();
             previousNumbers = data.previousNumbers || [];
-            if (!previousNumbers.includes(number)) {
-                previousNumbers.push(number);
+            const currentNumber = data.currentNumber || null;
+
+            // 현재 번호와 같은 경우는 추가하지 않음
+            if (currentNumber !== null && currentNumber !== number) {
+                previousNumbers.push(currentNumber);
                 if (previousNumbers.length > 3) previousNumbers.shift();
             }
         }
