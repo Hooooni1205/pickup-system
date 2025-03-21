@@ -4,13 +4,54 @@
     <title>주문 번호 호출기</title>
     <script type="module" src="./script.js"></script>
     <style>
-        body { text-align: center; margin: 20px; font-size: 20px; }
-        button { padding: 10px; margin: 5px; font-size: 18px; }
-        input { width: 100px; font-size: 18px; margin: 5px; text-align: center; }
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #333;
+            color: white;
+            font-family: 'Arial', sans-serif;
+        }
+        h2 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+        input {
+            width: 150px;
+            height: 50px;
+            font-size: 2rem;
+            margin: 10px;
+            text-align: center;
+            border-radius: 8px;
+            border: 2px solid #555;
+            background-color: #444;
+            color: white;
+        }
+        button {
+            width: 200px;
+            height: 60px;
+            font-size: 1.5rem;
+            margin: 10px;
+            border-radius: 12px;
+            border: none;
+            background-color: #007bff;
+            color: white;
+            transition: transform 0.2s;
+        }
+        button:hover {
+            transform: scale(1.05);
+            background-color: #0056b3;
+        }
+        button:active {
+            transform: scale(0.98);
+        }
     </style>
 </head>
 <body>
-    <h2>주문 번호 호출기</h2>
+    <h2>📢 주문 번호 호출기</h2>
     <input type="number" id="orderNumber" placeholder="번호 입력">
     <button onclick="callNumber()">호출</button>
     <button onclick="prevNumber()">이전 번호</button>
