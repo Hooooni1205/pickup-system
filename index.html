@@ -16,6 +16,11 @@
             color: black;
             font-family: 'Pretendard', sans-serif;
         }
+        #description {
+            font-size: 0.9rem;
+            color: #777;
+            margin-bottom: 5px;
+        }
         h2 {
             font-size: 3rem;
             margin-bottom: 20px;
@@ -58,6 +63,7 @@
     </style>
 </head>
 <body>
+    <div id="description">고객에게 호출할 번호를 입력하고 호출 버튼을 누르세요.</div>
     <h2>📢 주문 번호 호출기</h2>
     <input type="number" id="orderNumber" placeholder="번호 입력">
     <button onclick="callNumber()">호출</button>
