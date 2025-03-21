@@ -27,12 +27,13 @@ function callNumber() {
 }
 window.callNumber = callNumber;
 
-// 다음 번호로 증가
+// 다음 번호로 증가 (100번에서 1번으로 순환)
 function nextNumber() {
     const dbRef = ref(database);
     get(child(dbRef, 'pickupSystem/currentNumber')).then((snapshot) => {
         if (snapshot.exists()) {
-            const next = snapshot.val() + 1;
+            let next = snapshot.val() + 1;
+            if (next > 100) next = 1; // 100번 다음은 1번으로
             updateNumber(next);
             document.getElementById('orderNumber').value = next;
         }
@@ -45,7 +46,8 @@ function prevNumber() {
     const dbRef = ref(database);
     get(child(dbRef, 'pickupSystem/currentNumber')).then((snapshot) => {
         if (snapshot.exists()) {
-            const prev = Math.max(1, snapshot.val() - 1);
+            let prev = snapshot.val() - 1;
+            if (prev < 1) prev = 100; // 1번 이전은 100번으로
             updateNumber(prev);
             document.getElementById('orderNumber').value = prev;
         }
