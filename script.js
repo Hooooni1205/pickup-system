@@ -66,7 +66,7 @@ function updateNumber(number) {
             const currentNumber = data.currentNumber || null;
 
             // 현재 번호와 다르고 중복되지 않는 경우만 추가
-            if (currentNumber !== null && !previousNumbers.includes(currentNumber)) {
+            if (currentNumber !== null && currentNumber !== number) {
                 previousNumbers.push(currentNumber);
                 if (previousNumbers.length > 3) previousNumbers.shift();
             }
