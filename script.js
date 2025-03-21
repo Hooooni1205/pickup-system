@@ -94,7 +94,15 @@ function updateDisplay() {
             const currentNumber = data.currentNumber || '';
             const previousNumbers = data.previousNumbers || [];
 
-            document.getElementById('currentNumber').innerText = currentNumber;
+            const currentNumberElem = document.getElementById('currentNumber');
+            currentNumberElem.innerText = currentNumber;
+
+            // 100번인 경우 폰트 크기 줄이기
+            if (currentNumber === 100) {
+                currentNumberElem.style.fontSize = '20rem';
+            } else {
+                currentNumberElem.style.fontSize = '30rem';
+            }
 
             const prevNumberList = previousNumbers.slice(-3).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
             document.getElementById('prevNumberList').innerHTML = prevNumberList;
