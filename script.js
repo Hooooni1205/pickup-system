@@ -65,13 +65,14 @@ function updateNumber(number) {
             previousNumbers = data.previousNumbers || [];
             const currentNumber = data.currentNumber || null;
 
-            // 중복 제거와 동시에 현재 번호를 제외하고 추가
+            // 현재 번호를 이전 번호로 추가 (중복 방지)
             if (currentNumber !== null && currentNumber !== number) {
-                previousNumbers = previousNumbers.filter(num => num !== currentNumber);
-                previousNumbers.push(currentNumber);
-                if (previousNumbers.length > 3) previousNumbers.shift();
+                previousNumbers.unshift(currentNumber); // 가장 최근 번호를 앞에 추가
+                if (previousNumbers.length > 3) previousNumbers = previousNumbers.slice(0, 3); // 최대 3개 유지
             }
         }
+
+        // 데이터베이스 업데이트
         set(ref(database, 'pickupSystem/'), {
             currentNumber: number,
             previousNumbers: previousNumbers
@@ -108,8 +109,9 @@ function updateDisplay() {
             }
 
             // 이전 번호 리스트에서 현재 번호를 필터링하여 표시
-            const filteredNumbers = previousNumbers.slice(-3).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
-            document.getElementById('prevNumberList').innerHTML = filteredNumbers;
+            const filteredNumbers = previousNumbers.filter(num => num !== currentNumber);
+            const prevNumberList = filteredNumbers.slice(0, 3).map(num => `<li class="previous-number">${num}</li>`).join('');
+            document.getElementById('prevNumberList').innerHTML = prevNumberList;
 
             // 초기화 시 현재 번호 숨기기
             if (currentNumber === '') {
