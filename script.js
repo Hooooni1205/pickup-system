@@ -22,23 +22,7 @@ const database = getDatabase(app);
 function callNumber() {
     const number = parseInt(document.getElementById('orderNumber').value);
     if (!isNaN(number)) {
-        const dbRef = ref(database);
-        get(child(dbRef, 'pickupSystem')).then((snapshot) => {
-            let previousNumbers = [];
-            if (snapshot.exists()) {
-                const data = snapshot.val();
-                previousNumbers = data.previousNumbers || [];
-                // 중복 방지
-                if (!previousNumbers.includes(number)) {
-                    previousNumbers.push(number);
-                    if (previousNumbers.length > 5) previousNumbers.shift(); // 최근 5개만 저장
-                }
-            }
-            set(ref(database, 'pickupSystem/'), {
-                currentNumber: number,
-                previousNumbers: previousNumbers
-            });
-        });
+        updateNumber(number);
     }
 }
 window.callNumber = callNumber;
@@ -69,7 +53,7 @@ function prevNumber() {
 }
 window.prevNumber = prevNumber;
 
-// 번호 업데이트 (공통 함수)
+// 번호 업데이트
 function updateNumber(number) {
     const dbRef = ref(database);
     get(child(dbRef, 'pickupSystem')).then((snapshot) => {
@@ -77,10 +61,10 @@ function updateNumber(number) {
         if (snapshot.exists()) {
             const data = snapshot.val();
             previousNumbers = data.previousNumbers || [];
-            // 중복 방지
+            // 중복 방지 및 최신 번호 관리
             if (!previousNumbers.includes(number)) {
                 previousNumbers.push(number);
-                if (previousNumbers.length > 5) previousNumbers.shift(); // 최근 5개만 저장
+                if (previousNumbers.length > 3) previousNumbers.shift();
             }
         }
         set(ref(database, 'pickupSystem/'), {
@@ -90,20 +74,27 @@ function updateNumber(number) {
     });
 }
 
+// 초기화 버튼 기능
+function resetNumbers() {
+    set(ref(database, 'pickupSystem/'), {
+        currentNumber: null,
+        previousNumbers: []
+    });
+}
+window.resetNumbers = resetNumbers;
+
 // 실시간 업데이트
 function updateDisplay() {
     const numberRef = ref(database, 'pickupSystem/');
     onValue(numberRef, (snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
-            const currentNumber = data.currentNumber;
+            const currentNumber = data.currentNumber || '';
             const previousNumbers = data.previousNumbers || [];
 
-            // 현재 번호 표시
             document.getElementById('currentNumber').innerText = currentNumber;
 
-            // 이전 번호 표시
-            const prevNumberList = previousNumbers.slice(-5).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
+            const prevNumberList = previousNumbers.slice(-3).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
             document.getElementById('prevNumberList').innerHTML = prevNumberList;
         }
     });
