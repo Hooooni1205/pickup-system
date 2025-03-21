@@ -63,7 +63,6 @@ function updateNumber(number) {
         if (snapshot.exists()) {
             const data = snapshot.val();
             previousNumbers = data.previousNumbers || [];
-            // 중복 방지 및 최신 번호 관리
             if (!previousNumbers.includes(number)) {
                 previousNumbers.push(number);
                 if (previousNumbers.length > 3) previousNumbers.shift();
@@ -106,6 +105,11 @@ function updateDisplay() {
 
             const prevNumberList = previousNumbers.slice(-3).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
             document.getElementById('prevNumberList').innerHTML = prevNumberList;
+
+            // 초기화 시 현재 번호 숨기기
+            if (currentNumber === '') {
+                currentNumberElem.innerText = '';
+            }
         }
     });
 }
