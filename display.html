@@ -4,11 +4,38 @@
     <title>주문 번호 디스플레이</title>
     <script type="module" src="./script.js"></script>
     <style>
-        body { text-align: center; font-size: 100px; margin: 0; background-color: #222; color: white; }
-        #numberDisplay { margin-top: 30vh; }
+        body {
+            text-align: center;
+            margin: 0;
+            background-color: #000;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        #numberDisplay {
+            font-size: 10rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #00ff00;
+            text-shadow: 0px 0px 20px #00ff00;
+        }
+        #previousNumbers {
+            font-size: 2rem;
+            color: #888;
+            margin-top: 10px;
+        }
+        .previous-number {
+            margin: 5px;
+            color: #555;
+        }
     </style>
 </head>
 <body onload="updateDisplay()">
     <div id="numberDisplay">0</div>
+    <div id="previousNumbers">이전 번호: <span id="prevNumberList">없음</span></div>
 </body>
 </html>
