@@ -65,8 +65,9 @@ function updateNumber(number) {
             previousNumbers = data.previousNumbers || [];
             const currentNumber = data.currentNumber || null;
 
-            // 현재 번호와 다르고 중복되지 않는 경우만 추가
+            // 중복 제거와 동시에 현재 번호를 제외하고 추가
             if (currentNumber !== null && currentNumber !== number) {
+                previousNumbers = previousNumbers.filter(num => num !== currentNumber);
                 previousNumbers.push(currentNumber);
                 if (previousNumbers.length > 3) previousNumbers.shift();
             }
@@ -107,9 +108,8 @@ function updateDisplay() {
             }
 
             // 이전 번호 리스트에서 현재 번호를 필터링하여 표시
-            const filteredNumbers = previousNumbers.filter(num => num !== currentNumber);
-            const prevNumberList = filteredNumbers.slice(-3).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
-            document.getElementById('prevNumberList').innerHTML = prevNumberList;
+            const filteredNumbers = previousNumbers.slice(-3).reverse().map(num => `<li class="previous-number">${num}</li>`).join('');
+            document.getElementById('prevNumberList').innerHTML = filteredNumbers;
 
             // 초기화 시 현재 번호 숨기기
             if (currentNumber === '') {
