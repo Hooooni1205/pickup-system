@@ -100,8 +100,14 @@ function updateDisplay() {
             // 100번인 경우 폰트 크기 줄이기
             if (currentNumber === 100) {
                 currentNumberElem.style.fontSize = '25rem';
+                currentNumberElem.style.transform = 'scale(0.8, 1)';
+                currentNumberElem.style.position = 'relative';
+                currentNumberElem.style.right = '50px';
             } else {
                 currentNumberElem.style.fontSize = '35rem';
+                currentNumberElem.style.transform = 'scale(0.85, 1)';
+                currentNumberElem.style.position = '';  // 초기화
+                currentNumberElem.style.right = '';     // 초기화
             }
 
             const prevNumberList = previousNumbers.slice(0, 3).map(num => `<li class="previous-number">${num}</li>`).join('');
