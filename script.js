@@ -78,10 +78,19 @@ function updateNumber(number) {
     });
 }
 
+// 사운드 객체 가져오기
+const sound = document.getElementById("dingdongSound");
+
+// 사용자 첫 클릭 시 사운드 활성화
+document.body.addEventListener("click", () => {
+    sound.play().catch((e) => {
+        console.log("사운드 활성화를 위해 첫 클릭이 필요합니다.");
+    });
+}, { once: true });
+
 // 실시간 업데이트
 function updateDisplay() {
     const numberRef = ref(database, 'pickupSystem/');
-    const sound = document.getElementById("dingdongSound");
     onValue(numberRef, (snapshot) => {
         if (snapshot.exists()) {
             const data = snapshot.val();
@@ -91,13 +100,7 @@ function updateDisplay() {
             const currentNumberElem = document.getElementById('currentNumber');
             currentNumberElem.innerText = currentNumber;
 
-            // 번호가 업데이트될 때 소리 재생
-            if (currentNumber) {
-                sound.currentTime = 0;
-                sound.play();
-            }
-
-            // 100번인 경우 폰트 크기 줄이기
+            // 100번인 경우 폰트 크기와 장평 조정
             if (currentNumber === 100) {
                 currentNumberElem.style.fontSize = '25rem';
                 currentNumberElem.style.transform = 'scale(0.8, 1)';
@@ -106,13 +109,22 @@ function updateDisplay() {
             } else {
                 currentNumberElem.style.fontSize = '35rem';
                 currentNumberElem.style.transform = 'scale(0.85, 1)';
-                currentNumberElem.style.position = '';  // 초기화
-                currentNumberElem.style.right = '';     // 초기화
+                currentNumberElem.style.position = '';
+                currentNumberElem.style.right = '';
+            }
+
+            // 번호가 업데이트될 때 소리 재생
+            if (currentNumber) {
+                sound.currentTime = 0;
+                sound.play().catch((e) => {
+                    console.error("소리 재생 오류:", e);
+                });
             }
 
             const prevNumberList = previousNumbers.slice(0, 3).map(num => `<li class="previous-number">${num}</li>`).join('');
             document.getElementById('prevNumberList').innerHTML = prevNumberList;
 
+            // 초기화 시 현재 번호 숨기기
             if (currentNumber === '') {
                 currentNumberElem.innerText = '';
             }
