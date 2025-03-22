@@ -109,11 +109,6 @@ function updateDisplay() {
                 currentNumberElem.style.position = '';  // 초기화
                 currentNumberElem.style.right = '';     // 초기화
             }
-            // 번호가 업데이트될 때 소리 재생
-            if (currentNumber) {
-                sound.currentTime = 0;
-                sound.play();
-            }
 
             const prevNumberList = previousNumbers.slice(0, 3).map(num => `<li class="previous-number">${num}</li>`).join('');
             document.getElementById('prevNumberList').innerHTML = prevNumberList;
